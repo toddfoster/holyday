@@ -4,12 +4,10 @@ import argparse
 import unittest
 
 def main(argv=None):
-
     parser = argparse.ArgumentParser(description='Return information about the church calendar.')
     parser.add_argument('--date', nargs='?', type=datetime.date, default=datetime.date.today(), help='date in question')
     parser.add_argument('--test', action='store_true', help='Run unit tests')
     args = parser.parse_args()
-
 
     if args.test:
         sys.argv = sys.argv[:1]
@@ -17,9 +15,30 @@ def main(argv=None):
 
     targetDate = args.date
 
+    """
+        HolyDay calculator.
+
+        Every day is holy: a gift from God. But how do we mark them in the
+        church? Enumeration and priority of feasts are based on the BCP,
+        pp. 15ff. "The Calendar of the Church Year".
+    """
+
+    #TODO: decide input/output contents
+    #   input = optional date + optional end date + parameters to define output
+    #   output = plain text date, name of holy day, optionally requested additions, one per line
+    #TODO: Calculate additional dates (and prioritize)
+    #TODO: html interface
+    #TODO: ical output
+    #TODO: provide, but by default suppress, lesser feasts (commemorations)
+    #TODO: Ember days
+    #TODO: Rogration Days
+    #TODO: provide (BCP) RCL readings on Sundays
+    #TODO provide Daily Office readings
+    #TODO: provide collects for Sundays, principal feasts
+
+    #TODO: rm example testing output
     easter = calc_easter(targetDate.year)
     advent = calc_advent(targetDate.year)
-
     print "Easter = " + easter.isoformat()
     print "Advent = " + advent.isoformat()
 
@@ -33,6 +52,7 @@ def calc_advent(year):
     if (advent.weekday() < 6):
         advent = advent + datetime.timedelta(days=(6 - advent.weekday()))
     return advent
+
 
 def calc_easter(year):
     """
@@ -57,6 +77,7 @@ def calc_easter(year):
 
 
 class testDateManipulation(unittest.TestCase):
+    # Quick tutorial on Unittest: http://pymbook.readthedocs.org/en/latest/testing.html
     # Helpful chart of dates to test: http://www.infoplease.com/ipa/A0113948.html
     def test_easter(self):
         self.assertEqual(datetime.date(2000,04,23), calc_easter(2000))
